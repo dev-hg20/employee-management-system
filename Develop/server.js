@@ -124,25 +124,18 @@ function getEmployees() {
   return connection.query("SELECT * FROM employee");
 }
 
-function updateRole() {
-  var query = connection.query("UPDATE employee SET ? WHERE ?", [
-    {
-      name: "title",
-      type: "input",
-      message: "What title of the role?",
-    },
-    {
-      name: "salary",
-      type: "input",
-      message: "What is the salary of the role?",
-    },
-    {
-      name: "department_id",
-      type: "rawlist",
-      message: "Which deparment will this role sit in?",
-      choices: departments,
-    },
-  ]);
+function updateRoles() {
+  inquirer
+    .prompt([
+      {
+        name: "employee",
+        type: "input",
+        message: "Which employee would you like to update?",
+      },
+    ])
+    .then(function (answers) {
+      connection.query("UPDATE employee SET ? WHERE ?", [{}]);
+    });
 }
 
 start();
