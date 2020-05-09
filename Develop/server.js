@@ -33,13 +33,21 @@ function start() {
           addRole();
           break;
         case "View Roles":
-          viewRole();
+          getRoles().then(function (res) {
+            console.table(res);
+            console.log("\n");
+            start();
+          });
           break;
         case "Add Employees":
           addEmployee();
           break;
         case "View Employees":
-          viewEmployee();
+          getEmployees().then(function (res) {
+            console.table(res);
+            console.log("\n");
+            start();
+          });
           break;
         case "Update Roles":
           updateRoles();
@@ -73,7 +81,7 @@ function addRole() {
     const departments = res.map(function (dep) {
       return { id: dep.id, name: dep.name };
     });
-    console.table(departments);
+    // console.table(departments);
     inquirer
       .prompt([
         {
@@ -89,36 +97,52 @@ function addRole() {
         {
           name: "department_id",
           type: "rawlist",
-          message: "What is the salary of the role?",
+          message: "Which deparment will this role sit in?",
           choices: departments,
         },
       ])
       .then(function (answers) {
-        console.log(answers);
-        // connection.query("INSERT INTO role SET ?", answer, () =>
-        //   viewRoles()
-        // );
+        console.table(answers);
+        connection.query(
+          "INSERT INTO role SET (title, salary,department_id) value (${title},${$salary},{$department_id}",
+          answers,
+          () => getRoles()
+        );
       });
   });
 }
 
-function viewRole() {
-  connection.query("SELECT * FROM role", function (err, res) {
-    if (err) throw err;
-    console.table(res);
-    start();
-  });
+function getRoles() {
+  return connection.query("SELECT * FROM role");
+  // connection.query("SELECT * FROM role", function (err, res) {
+  //   if (err) throw err;
+  //   start();
+  // });
 }
 
-function viewEmployee() {
-  connection.query("SELECT * FROM employee", function (err, res) {
-    if (err) throw err;
-    console.table(res);
-  });
+function getEmployees() {
+  return connection.query("SELECT * FROM employee");
 }
 
 function updateRole() {
-  var query = connection.query("UPDATE employee SET ? WHERE ?");
+  var query = connection.query("UPDATE employee SET ? WHERE ?", [
+    {
+      name: "title",
+      type: "input",
+      message: "What title of the role?",
+    },
+    {
+      name: "salary",
+      type: "input",
+      message: "What is the salary of the role?",
+    },
+    {
+      name: "department_id",
+      type: "rawlist",
+      message: "Which deparment will this role sit in?",
+      choices: departments,
+    },
+  ]);
 }
 
 start();

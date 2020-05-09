@@ -15,7 +15,11 @@ INSERT INTO role (title,salary,department_id) VALUES
     ("senior sales assistant", 80000, 3);
     
 
+SELECT * FROM role;
+
 INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES
 	 ("Jim","Barnes",1, NULL),
      ("Jane","Doe",2, 1),
 	 ("Bob","Bob",3, NULL);
+
+SELECT * FROM employee;
